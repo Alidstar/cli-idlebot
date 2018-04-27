@@ -11,9 +11,16 @@ AutoClick() {
 	ControlClick, x700 y330, Crusaders of The Lost Idols
 }
 
+Forward() {
+	ControlSend, , {Right}, Crusaders of The Lost Idols
+}
+
 i := 0
 Loop {
-	If (level_enable and Mod(i, 300) = 0) {
+	If (forward_enable and Mod(i, 600) = 0) {
+		Forward()
+	}
+	If (level_enable and Mod(i, 200) = 0) {
 		LevelUp()
 	}
 	If (collect_enable) {
@@ -23,10 +30,10 @@ Loop {
 		AutoClick()
 	}
 
-	If (i = 299) {
+	If (i = 600) {
 		i := 0
 	} Else {
-		i := i + 1
+		i += 1
 	}
 	Sleep, 100
 }
@@ -36,5 +43,6 @@ Loop {
 
 ^!a:: click_enable := !click_enable
 ^!c:: collect_enable := !collect_enable
+^!Right:: forward_enable := !forward_enable
 
 ;Escape::ExitApp
