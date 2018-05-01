@@ -23,13 +23,22 @@ Forward() {
 	ControlSend, , {Right}, Crusaders of The Lost Idols
 }
 
+FocusLevel(row, col) {
+	x := (col * 310) + 300
+	y := (row * 90) + 550
+	ControlSend, , {Ctrl Down}, Crusaders of The Lost Idols
+	ControlClick, x%x% y%y%, Crusaders of The Lost Idols
+	ControlSend, , {Ctrl up}, Crusaders of The Lost Idols
+}
+
 i := 0
 Loop {
 	If (state.autoplay) {
-		If (Mod(i, 300) = 0) {
+		If (Mod(i, 250) = 0) {
+			FocusLevel(0, 0)
 			LevelUp()
 		}
-		If (Mod(i, 600) = 0) {
+		If (Mod(i, 500) = 0) {
 			Forward()
 		}
 	}
@@ -40,7 +49,7 @@ Loop {
 		AutoClick()
 	}
 
-	If (i = 600) {
+	If (i = 500) {
 		i := 0
 	} Else {
 		i += 1
