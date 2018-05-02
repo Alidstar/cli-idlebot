@@ -1,25 +1,33 @@
 class State {
-	autoplay := False
-	autoclick := False
-	autocollect := False
+    autoplay := False
+    autoclick := False
+    autocollect := False
 
-	__Get(key) {
-		return this[key]
-	}
+    focusOn := 0
 
-	__Set(key, value) {
-		this[key] := value
-	}
+    __Get(key) {
+        return this[key]
+    }
 
-	__show_state(name, var) {
-		delim := StrLen(name) < 11 ? "`t`t" : "`t"
-		return name . delim . (var ? "ON" : "OFF")
-	}
+    __Set(key, value) {
+        this[key] := value
+    }
 
-	show() {
-		str := this.__show_state("auto play", this.autoplay)
-		str .= "`n" . this.__show_state("auto click", this.autoclick)
-		str .= "`n" . this.__show_state("auto collect", this.autocollect)
-		MsgBox, , State, %str%
-	}
+    __show_state_bool(name, var) {
+        delim := StrLen(name) < 11 ? "`t`t" : "`t"
+        return name . delim . (var ? "ON" : "OFF")
+    }
+
+    __show_state_value(name, value) {
+        delim := StrLen(name) < 11 ? "`t`t" : "`t"
+        return name . delim . value
+    }
+
+    show() {
+        str := this.__show_state_bool("auto play", this.autoplay)
+        str .= "`n" . this.__show_state_bool("auto click", this.autoclick)
+        str .= "`n" . this.__show_state_bool("auto collect", this.autocollect)
+        str .= "`n" . this.__show_state_value("focus crusader", this.focusOn ? this.focusOn : "None")
+        MsgBox, , State, %str%
+    }
 }
