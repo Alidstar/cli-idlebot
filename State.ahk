@@ -5,22 +5,14 @@ class State {
 
     focusOn := 0
 
-    __Get(key) {
-        return this[key]
-    }
-
-    __Set(key, value) {
-        this[key] := value
-    }
-
     __show_state_bool(name, var) {
         delim := StrLen(name) < 11 ? "`t`t" : "`t"
-        return name . delim . (var ? "ON" : "OFF")
+        return name delim (var ? "ON" : "OFF")
     }
 
     __show_state_value(name, value) {
         delim := StrLen(name) < 11 ? "`t`t" : "`t"
-        return name . delim . value
+        return name delim value
     }
 
     show() {

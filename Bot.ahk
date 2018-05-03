@@ -1,7 +1,10 @@
-#Include, state.ahk
+#Include, State.ahk
+#Include, Game.ahk
 
 LevelUp() {
-    ControlClick, x994 y664, Crusaders of The Lost Idols
+    win := Game.WIN_NAME
+    p := Game.LEVELUP_BUTTON.toPosition()
+    ControlClick, %p%, %win%
 }
 
 Collect() {
@@ -10,21 +13,22 @@ Collect() {
 }
 
 AutoClick() {
-    ControlClick, x700 y330, Crusaders of The Lost Idols
+    win := Game.WIN_NAME
+    p := Game.CLICK_LOCATION.toPosition()
+    ControlClick, %p%, %win%
 }
 
 Forward() {
-    ControlSend, , {Right}, Crusaders of The Lost Idols
+    win := Game.WIN_NAME
+    ControlSend, , {Right}, %win%
 }
 
 FocusLevel(index) {
-    row := Mod(index, 2)
-    col := index // 2 
-    x := (col * 310) + 300
-    y := (row * 90) + 550
-    ControlSend, , {Ctrl Down}, Crusaders of The Lost Idols
-    ControlClick, x%x% y%y%, Crusaders of The Lost Idols
-    ControlSend, , {Ctrl up}, Crusaders of The Lost Idols
+    win := Game.WIN_NAME
+    p := Game.GetCrusaderPosition(index).toPosition()
+    ControlSend, , {Ctrl Down}, %win%
+    ControlClick, %p%, %win%
+    ControlSend, , {Ctrl up}, %win%
 }
 
 i := 0
