@@ -7,8 +7,9 @@ F5      show bot status
 F6      toggle auto play
 F7      toggle auto click
 F8      toggle auto collect
-F9      manually crusader level up
+F9      manually crusaders level up
 F10     manually level up focused crusader
+F11     manually crusaders upgrade
 
 Alt+0   clear focused crusader setting
 Alt+1   focus on top-left crusader

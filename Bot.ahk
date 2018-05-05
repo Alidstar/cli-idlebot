@@ -7,6 +7,12 @@ LevelUp() {
     ControlClick, %p%, %win%
 }
 
+Upgrade() {
+    win := Game.WIN_NAME
+    p := Game.UPGRADE_BUTTON.toPosition()
+    ControlClick, %p%, %win%
+}
+
 Collect() {
     MouseMove, 0, 100, 0, R
     MouseMove, 0, -100, 0, R
@@ -63,6 +69,7 @@ F7:: state.autoclick := !state.autoclick
 F8:: state.autocollect := !state.autocollect
 F9:: LevelUp()
 F10:: FocusLevel(state.focusOn)
+F11:: Upgrade()
 
 !0:: state.focusOn := 0
 !1:: state.focusOn := 1
