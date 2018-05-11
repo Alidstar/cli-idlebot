@@ -30,11 +30,13 @@ Forward() {
 }
 
 FocusLevel(index) {
-    win := Game.WIN_NAME
-    p := Game.GetCrusaderPosition(index).toPosition()
-    ControlSend, , {Ctrl Down}, %win%
-    ControlClick, %p%, %win%
-    ControlSend, , {Ctrl up}, %win%
+    If (index >= 1 && index <= 6) {
+        win := Game.WIN_NAME
+        p := Game.GetCrusaderPosition(index).toPosition()
+        ControlSend, , {Ctrl Down}, %win%
+        ControlClick, %p%, %win%
+        ControlSend, , {Ctrl up}, %win%
+    }
 }
 
 i := 0
@@ -47,6 +49,9 @@ Loop {
         If (Mod(i, 500) = 0) {
             Forward()
         }
+        If (Mod(i, 600) = 0) {
+            Upgrade()
+        }
     }
     If (state.autocollect) {
         Collect()
@@ -55,7 +60,7 @@ Loop {
         AutoClick()
     }
 
-    If (i = 500) {
+    If (i = 1000) {
         i := 0
     } Else {
         i += 1
