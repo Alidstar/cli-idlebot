@@ -2,15 +2,19 @@
 #Include, Game.ahk
 
 LevelUp() {
-    win := Game.WIN_NAME
-    p := Game.LEVELUP_BUTTON.toPosition()
-    ControlClick, %p%, %win%
+    if (Game.IsInCrusaderTab()) {
+        win := Game.WIN_NAME
+        p := Game.LEVELUP_BUTTON.toPosition()
+        ControlClick, %p%, %win%
+    }
 }
 
 Upgrade() {
-    win := Game.WIN_NAME
-    p := Game.UPGRADE_BUTTON.toPosition()
-    ControlClick, %p%, %win%
+    if (Game.IsInCrusaderTab()) {
+        win := Game.WIN_NAME
+        p := Game.UPGRADE_BUTTON.toPosition()
+        ControlClick, %p%, %win%
+    }
 }
 
 Collect() {
@@ -19,18 +23,22 @@ Collect() {
 }
 
 AutoClick() {
-    win := Game.WIN_NAME
-    p := Game.CLICK_LOCATION.toPosition()
-    ControlClick, %p%, %win%
+    if (Game.IsInCrusaderTab()) {
+        win := Game.WIN_NAME
+        p := Game.CLICK_LOCATION.toPosition()
+        ControlClick, %p%, %win%
+    }
 }
 
 Forward() {
-    win := Game.WIN_NAME
-    ControlSend, , {Right}, %win%
+    if (Game.IsInCrusaderTab()) {
+        win := Game.WIN_NAME
+        ControlSend, , {Right}, %win%
+    }
 }
 
 FocusLevel(index) {
-    If (index >= 1 && index <= 6) {
+    If (Game.IsInCrusaderTab() && index >= 1 && index <= 6) {
         win := Game.WIN_NAME
         p := Game.GetCrusaderPosition(index).toPosition()
         ControlSend, , {Ctrl Down}, %win%
