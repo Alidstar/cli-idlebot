@@ -17,6 +17,16 @@ Upgrade() {
     }
 }
 
+StormRider() {
+    If (Game.IsAbilityReady(7)) {
+        win := Game.WIN_NAME
+        a2 := Game.GetAbility(2).toPosition()
+        a7 := Game.GetAbility(7).toPosition()
+        ControlClick, %a2%, %win%
+        ControlClick, %a7%, %win%
+    }
+}
+
 Collect() {
     MouseMove, 0, 100, 0, R
     MouseMove, 0, -100, 0, R
@@ -51,6 +61,7 @@ i := 0
 Loop {
     If (state.autoplay) {
         If (Mod(i, 250) = 0) {
+            StormRider()
             FocusLevel(state.focusOn)
             LevelUp()
         }
