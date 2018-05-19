@@ -17,6 +17,11 @@ Upgrade() {
     }
 }
 
+LoadFormation(key) {
+    win := Game.WIN_NAME
+    ControlSend, , %key%, %win%
+}
+
 StormRider() {
     If (Game.IsAbilityReady(7)) {
         win := Game.WIN_NAME
@@ -60,12 +65,14 @@ FocusLevel(index) {
 i := 0
 Loop {
     If (state.autoplay) {
+        If (Mod(i, 50) = 0) {
+            LoadFormation(state.reformation)
+            LoadFormation(state.reformation)
+        }
         If (Mod(i, 250) = 0) {
             StormRider()
             FocusLevel(state.focusOn)
             LevelUp()
-        }
-        If (Mod(i, 500) = 0) {
             Forward()
         }
         If (Mod(i, 600) = 0) {
@@ -87,6 +94,7 @@ Loop {
     Sleep, 100
 }
 
+; F1:: LoadFormation(state.reformation)
 F5:: state.show()
 F6:: state.autoplay := !state.autoplay
 F7:: state.autoclick := !state.autoclick
@@ -95,10 +103,14 @@ F9:: LevelUp()
 F10:: FocusLevel(state.focusOn)
 F11:: Upgrade()
 
-!0:: state.focusOn := 0
+!0:: state.focusOn := 0 state.reformation := 0
 !1:: state.focusOn := 1
 !2:: state.focusOn := 2
 !3:: state.focusOn := 3
 !4:: state.focusOn := 4
 !5:: state.focusOn := 5
 !6:: state.focusOn := 6
+
+!7:: state.reformation := "q"
+!8:: state.reformation := "w"
+!9:: state.reformation := "e"

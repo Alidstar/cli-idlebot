@@ -12,7 +12,7 @@ class Game {
     static ABI_BUTTON := new Game.Dimension(370, 485)
     static ABI_OFFSET_X := 40
 
-    static CLICK_LOCATION := new Game.Dimension(480, 330)
+    static CLICK_LOCATION := new Game.Dimension(550, 330)
 
     static NAVI_BUTTON_HOVER_COLOR := 0xFFCA1C
     static NAVI_BUTTON_ENABLE_COLOR := 0xFFB103

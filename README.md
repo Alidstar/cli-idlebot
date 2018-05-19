@@ -11,13 +11,16 @@ F9      manually crusaders level up
 F10     manually level up focused crusader
 F11     manually crusaders upgrade
 
-Alt+0   clear focused crusader setting
+Alt+0   clear focused crusader/reload formation setting
 Alt+1   focus on top-left crusader
 Alt+2   focus on bottom-left crusader
 Alt+3   focus on top-center crusader
 Alt+4   focus on bottom-center crusader
 Alt+5   focus on top-right crusader
 Alt+6   focus on bottom-right crusader
+Alt+7   set load formation 'q'
+Alt+8   set load formation 'w'
+Alt+9   set load formation 'e'
 ```
 
 ## Setup
