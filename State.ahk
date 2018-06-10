@@ -2,6 +2,7 @@ class State {
     autoplay := False
     autoclick := False
     autocollect := False
+    fastforward := False
 
     reformation := 0
     focusOn := 0
@@ -20,6 +21,7 @@ class State {
         str := this.__show_state_bool("auto play", this.autoplay)
         str .= "`n" . this.__show_state_bool("auto click", this.autoclick)
         str .= "`n" . this.__show_state_bool("auto collect", this.autocollect)
+        str .= "`n" . this.__show_state_bool("fast forward", this.fastforward)
         str .= "`n" . this.__show_state_value("focus crusader", this.focusOn ? this.focusOn : "None")
         str .= "`n" . this.__show_state_value("reformation", this.reformation ? this.reformation : "None")
         MsgBox, , State, %str%

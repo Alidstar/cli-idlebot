@@ -1,15 +1,10 @@
 class Game {
     static WIN_NAME := "Crusaders of The Lost Idols"
 
-    static WIN_SIZE := new Game.Dimension(1016, 714)
-    static LEVELUP_BUTTON := new Game.Dimension(994, 664)
-    static UPGRADE_BUTTON := new Game.Dimension(994, 566)
-    static LEFT_BUTTON := new Game.Dimension(22, 615)
-    static RIGHT_BUTTON := new Game.Dimension(994, 615)
+    static WIN_RATIO := 0.675 ; h/w
 
-    static CSD_TL_BUTTON := new Game.Dimension(300, 550)
-    static CSD_OFFSET := new Game.Dimension(310, 90)
-    static ABI_BUTTON := new Game.Dimension(370, 485)
+    static CSD_OFFSET_X := 310
+    static CSD_OFFSET_Y := 90
     static ABI_OFFSET_X := 40
 
     static CLICK_LOCATION := new Game.Dimension(550, 330)
@@ -22,24 +17,54 @@ class Game {
     static ABI_BUTTON_ENABLE_COLOR := 0x009200
     static ABI_BUTTON_DISABLE_COLOR := 0x6F6F6F
 
-    GetLocation(xRatio, yRatio) {
-        name := Game.WIN_NAME
+    __New() {
+        if (!WinExist(Game.WIN_NAME)) {
+            MsgBox % Game.WIN_NAME . " is not launched"
+            ExitApp, -1
+        }
+
+        name := Game.WIN_NAMEs
+        WinGet, hwnd, ID, %name%
         WinGetPos, , , win_w, win_h, %name%
+        ; MsgBox % "win size " . win_w . " " . win_h
+
+        CoordMode, Mouse, Screen
+        MouseGetPos, old_mx, old_my
+
+        WinActivate, %name%
+        CoordMode, Mouse, Client
+        BlockInput, MouseMove
+        MouseMove, 0, 0, 0
+
+        CoordMode, Mouse, Window
+        MouseGetPos, cli_offset_x, cli_offset_y
+
+        CoordMode, Mouse, Screen
+        MouseMove, old_mx, old_my
+        BlockInput, MouseMoveOff
+
+        CoordMode, Mouse, Window
+        ; MsgBox % "client offset " . cli_offset_x . " " . cli_offset_y
+
+        this.lvlup_button := new Game.Dimension(985, 630).offset(cli_offset_x, cli_offset_y)
+        this.upgrade_button := new Game.Dimension(985, 540).offset(cli_offset_x, cli_offset_y)
+        this.left_button := new Game.Dimension(10, 585).offset(cli_offset_x, cli_offset_y)
+        this.right_button := new Game.Dimension(985, 585).offset(cli_offset_x, cli_offset_y)
+        this.csd_button := new Game.Dimension(285, 525).offset(cli_offset_x, cli_offset_y)
+        this.abi_button := new Game.Dimension(360, 454).offset(cli_offset_x, cli_offset_y)
     }
 
     GetCrusaderPosition(index) {
         row := Mod(index - 1, 2)
-        col := (index - 1) // 2 
-        p := Game.CSD_TL_BUTTON.offset(Game.CSD_OFFSET.x * col, Game.CSD_OFFSET.y * row)
-        return new Game.Dimension(p.x, p.y)
+        col := (index - 1) // 2
+        return this.csd_button.offset(Game.CSD_OFFSET_X * col, Game.CSD_OFFSET_Y * row)
     }
 
     IsInCrusaderTab() {
         if (WinActive(Game.WIN_NAME)) {
             win := Game.WIN_NAME
-            WinGetPos, win_x, win_y, , , %win%
-            x := Game.LEFT_BUTTON.x
-            y := Game.LEFT_BUTTON.y
+            x := this.left_button.x
+            y := this.left_button.y
             PixelGetColor, color, %x%, %y%, RGB
             return (color = Game.NAVI_BUTTON_HOVER_COLOR) || (color = Game.NAVI_BUTTON_ENABLE_COLOR) || (color = Game.NAVI_BUTTON_DISABLE_COLOR)
         }
@@ -49,7 +74,6 @@ class Game {
     IsAbilityReady(index) {
         if (WinActive(Game.WIN_NAME) && index >= 1 && index <= 8) {
             win := Game.WIN_NAME
-            WinGetPos, win_x, win_y, , , %win%
             ability := Game.GetAbility(index)
             x := ability.x
             y := ability.y
@@ -61,7 +85,7 @@ class Game {
 
     GetAbility(index) {
         if (index >= 1 && index <= 8) {
-            return Game.ABI_BUTTON.offset((index - 1) * Game.ABI_OFFSET_X, 0)
+            return Game.abi_button.offset((index - 1) * Game.ABI_OFFSET_X, 0)
         }
         return 0
     }

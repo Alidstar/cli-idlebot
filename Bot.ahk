@@ -1,32 +1,32 @@
 #Include, State.ahk
 #Include, Game.ahk
 
-LevelUp() {
-    if (Game.IsInCrusaderTab()) {
-        win := Game.WIN_NAME
-        p := Game.LEVELUP_BUTTON.toPosition()
+LevelUp(game) {
+    if (game.IsInCrusaderTab()) {
+        win := game.WIN_NAME
+        p := game.lvlup_button.toPosition()
         ControlClick, %p%, %win%
     }
 }
 
-Upgrade() {
-    if (Game.IsInCrusaderTab()) {
-        win := Game.WIN_NAME
-        p := Game.UPGRADE_BUTTON.toPosition()
+Upgrade(game) {
+    if (game.IsInCrusaderTab()) {
+        win := game.WIN_NAME
+        p := game.UPGRADE_BUTTON.toPosition()
         ControlClick, %p%, %win%
     }
 }
 
-LoadFormation(key) {
-    win := Game.WIN_NAME
+LoadFormation(game, key) {
+    win := game.WIN_NAME
     ControlSend, , %key%, %win%
 }
 
-StormRider() {
-    If (Game.IsAbilityReady(7)) {
-        win := Game.WIN_NAME
-        a2 := Game.GetAbility(2).toPosition()
-        a7 := Game.GetAbility(7).toPosition()
+StormRider(game) {
+    If (game.IsAbilityReady(7)) {
+        win := game.WIN_NAME
+        a2 := game.GetAbility(2).toPosition()
+        a7 := game.GetAbility(7).toPosition()
         ControlClick, %a2%, %win%
         ControlClick, %a7%, %win%
     }
@@ -37,53 +37,57 @@ Collect() {
     MouseMove, 0, -100, 0, R
 }
 
-AutoClick() {
-    if (Game.IsInCrusaderTab()) {
-        win := Game.WIN_NAME
-        p := Game.CLICK_LOCATION.toPosition()
-        ControlClick, %p%, %win%
+AutoClick(game) {
+    if (game.IsInCrusaderTab()) {
+        win := game.WIN_NAME
+        MouseGetPos, mx, my
+        ControlClick, x%mx% y%my%, %win%
+        ; p := game.CLICK_LOCATION.toPosition()
+        ; ControlClick, %p%, %win%
     }
 }
 
-Forward() {
-    if (Game.IsInCrusaderTab()) {
-        win := Game.WIN_NAME
-        ControlSend, , {Right}, %win%
-    }
+Forward(game) {
+    win := game.WIN_NAME
+    ControlSend, , {Right}, %win%
 }
 
-FocusLevel(index) {
-    If (Game.IsInCrusaderTab() && index >= 1 && index <= 6) {
-        win := Game.WIN_NAME
-        p := Game.GetCrusaderPosition(index).toPosition()
+FocusLevel(game, index) {
+    If (game.IsInCrusaderTab() && index >= 1 && index <= 6) {
+        win := game.WIN_NAME
+        p := game.GetCrusaderPosition(index).toPosition()
         ControlSend, , {Ctrl Down}, %win%
         ControlClick, %p%, %win%
         ControlSend, , {Ctrl up}, %win%
     }
 }
 
+game := new Game()
+
 i := 0
 Loop {
+    If (state.fastforward) {
+        Forward(game)
+    }
     If (state.autoplay) {
-        If (Mod(i, 50) = 0) {
-            LoadFormation(state.reformation)
-            LoadFormation(state.reformation)
+        If (Mod(i, 100) = 0) {
+            LoadFormation(game, state.reformation)
         }
         If (Mod(i, 250) = 0) {
-            StormRider()
-            FocusLevel(state.focusOn)
-            LevelUp()
-            Forward()
+            StormRider(game)
+            FocusLevel(game, state.focusOn)
+            LevelUp(game)
+            Forward(game)
         }
-        If (Mod(i, 600) = 0) {
-            Upgrade()
-        }
+        ; If (Mod(i, 600) = 0) {
+            ; Upgrade(game)
+        ; }
     }
     If (state.autocollect) {
         Collect()
     }
     If (state.autoclick) {
-        AutoClick()
+        AutoClick(game)
     }
 
     If (i = 1000) {
@@ -99,9 +103,9 @@ F5:: state.show()
 F6:: state.autoplay := !state.autoplay
 F7:: state.autoclick := !state.autoclick
 F8:: state.autocollect := !state.autocollect
-F9:: LevelUp()
-F10:: FocusLevel(state.focusOn)
-F11:: Upgrade()
+F9:: LevelUp(game)
+F10:: FocusLevel(game, state.focusOn)
+F11:: Upgrade(game)
 
 !0:: state.focusOn := 0 state.reformation := 0
 !1:: state.focusOn := 1
@@ -114,3 +118,5 @@ F11:: Upgrade()
 !7:: state.reformation := "q"
 !8:: state.reformation := "w"
 !9:: state.reformation := "e"
+
+!Right:: state.fastforward := !state.fastforward
