@@ -2,7 +2,8 @@
 #Include, Game.ahk
 
 LevelUp(game) {
-    if (game.IsInCrusaderTab()) {
+    location := game.GetMouseLocation()
+    if (location == Game.LOCATION_NOT_ACTIVE || location & Game.LOCATION_IN_CSD_TAB) {
         win := game.WIN_NAME
         p := game.lvlup_button.toPosition()
         ControlClick, %p%, %win%
@@ -10,7 +11,8 @@ LevelUp(game) {
 }
 
 Upgrade(game) {
-    if (game.IsInCrusaderTab()) {
+    location := game.GetMouseLocation()
+    if (location == Game.LOCATION_NOT_ACTIVE || location & Game.LOCATION_IN_CSD_TAB) {
         win := game.WIN_NAME
         p := game.UPGRADE_BUTTON.toPosition()
         ControlClick, %p%, %win%
@@ -33,17 +35,20 @@ StormRider(game) {
 }
 
 Collect() {
-    MouseMove, 0, 100, 0, R
+    MouseMove, 0, 50, 0, R
     MouseMove, 0, -100, 0, R
+    MouseMove, 0, 50, 0, R
 }
 
 AutoClick(game) {
-    if (game.IsInCrusaderTab()) {
-        win := game.WIN_NAME
+    win := game.WIN_NAME
+    location := game.GetMouseLocation()
+    if (location & Game.LOCATION_IN_CSD_TAB && state.followmouse) {
         MouseGetPos, mx, my
         ControlClick, x%mx% y%my%, %win%
-        ; p := game.CLICK_LOCATION.toPosition()
-        ; ControlClick, %p%, %win%
+    } else {
+        p := game.CLICK_LOCATION.toPosition()
+        ControlClick, %p%, %win%
     }
 }
 
@@ -53,7 +58,7 @@ Forward(game) {
 }
 
 FocusLevel(game, index) {
-    If (game.IsInCrusaderTab() && index >= 1 && index <= 6) {
+    If (game.GetMouseLocation() && index >= 1 && index <= 6) {
         win := game.WIN_NAME
         p := game.GetCrusaderPosition(index).toPosition()
         ControlSend, , {Ctrl Down}, %win%
@@ -79,9 +84,11 @@ Loop {
             LevelUp(game)
             Forward(game)
         }
-        ; If (Mod(i, 600) = 0) {
-            ; Upgrade(game)
-        ; }
+    }
+    If (state.autoupgrade) {
+        If (Mod(i, 600) = 0) {
+            Upgrade(game)
+        }
     }
     If (state.autocollect) {
         Collect()
@@ -98,13 +105,12 @@ Loop {
     Sleep, 100
 }
 
-; F1:: LoadFormation(state.reformation)
-F5:: state.show()
-F6:: state.autoplay := !state.autoplay
+F5:: state.autoplay := !state.autoplay
+F6:: state.autoupgrade := !state.autoupgrade
 F7:: state.autoclick := !state.autoclick
 F8:: state.autocollect := !state.autocollect
-F9:: LevelUp(game)
-F10:: FocusLevel(game, state.focusOn)
+F9:: state.show()
+F10:: LevelUp(game)
 F11:: Upgrade(game)
 
 !0:: state.focusOn := 0 state.reformation := 0
@@ -120,3 +126,5 @@ F11:: Upgrade(game)
 !9:: state.reformation := "e"
 
 !Right:: state.fastforward := !state.fastforward
+
+MButton:: state.followmouse := !state.followmouse

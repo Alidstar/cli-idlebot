@@ -9,6 +9,11 @@ class Game {
 
     static CLICK_LOCATION := new Game.Dimension(550, 330)
 
+    static LOCATION_NOT_ACTIVE := 0
+    static LOCATION_IN_GAME := 1
+    static LOCATION_IN_CSD_TAB := 2
+    static LOCATION_IN_PLAY_AREA := 4
+
     static NAVI_BUTTON_HOVER_COLOR := 0xFFCA1C
     static NAVI_BUTTON_ENABLE_COLOR := 0xFFB103
     static NAVI_BUTTON_DISABLE_COLOR := 0xA07107
@@ -60,15 +65,21 @@ class Game {
         return this.csd_button.offset(Game.CSD_OFFSET_X * col, Game.CSD_OFFSET_Y * row)
     }
 
-    IsInCrusaderTab() {
-        if (WinActive(Game.WIN_NAME)) {
-            win := Game.WIN_NAME
-            x := this.left_button.x
-            y := this.left_button.y
-            PixelGetColor, color, %x%, %y%, RGB
-            return (color = Game.NAVI_BUTTON_HOVER_COLOR) || (color = Game.NAVI_BUTTON_ENABLE_COLOR) || (color = Game.NAVI_BUTTON_DISABLE_COLOR)
+    GetMouseLocation() {
+        location := WinActive(Game.WIN_NAME) ? Game.LOCATION_IN_GAME : Game.LOCATION_NOT_ACTIVE
+        if (location == Game.LOCATION_NOT_ACTIVE) {
+            return location
         }
-        return 1
+
+        win := Game.WIN_NAME
+        x := this.left_button.x
+        y := this.left_button.y
+        PixelGetColor, color, %x%, %y%, RGB
+        if ((color = Game.NAVI_BUTTON_HOVER_COLOR) || (color = Game.NAVI_BUTTON_ENABLE_COLOR) || (color = Game.NAVI_BUTTON_DISABLE_COLOR)) {
+            location |= Game.LOCATION_IN_CSD_TAB
+        }
+
+        return location
     }
 
     IsAbilityReady(index) {
