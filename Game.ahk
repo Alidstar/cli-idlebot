@@ -9,10 +9,10 @@ class Game {
 
     static CLICK_LOCATION := new Game.Dimension(550, 330)
 
-    static LOCATION_NOT_ACTIVE := 0
-    static LOCATION_IN_GAME := 1
-    static LOCATION_IN_CSD_TAB := 2
-    static LOCATION_IN_PLAY_AREA := 4
+    static LCT_ACTIVE := 1 << 1
+    static LCT_IN_GAME := 1 << 2
+    static LCT_IN_CSD_TAB :=  1 << 3
+    static LCT_IN_PLAY_AREA := 1 << 4
 
     static NAVI_BUTTON_HOVER_COLOR := 0xFFCA1C
     static NAVI_BUTTON_ENABLE_COLOR := 0xFFB103
@@ -30,7 +30,12 @@ class Game {
 
         name := Game.WIN_NAMEs
         WinGet, hwnd, ID, %name%
-        WinGetPos, , , win_w, win_h, %name%
+        WinGetPos, win_x, win_y, win_w, win_h, %name%
+        this.win_x := win_x
+        this.win_y := win_y
+        this.win_w := win_w
+        this.win_h := win_h
+        ; MsgBox % "win location " . win_x . " " . win_y
         ; MsgBox % "win size " . win_w . " " . win_h
 
         CoordMode, Mouse, Screen
@@ -65,21 +70,26 @@ class Game {
         return this.csd_button.offset(Game.CSD_OFFSET_X * col, Game.CSD_OFFSET_Y * row)
     }
 
-    GetMouseLocation() {
-        location := WinActive(Game.WIN_NAME) ? Game.LOCATION_IN_GAME : Game.LOCATION_NOT_ACTIVE
-        if (location == Game.LOCATION_NOT_ACTIVE) {
-            return location
-        }
+    UpdateMouseLocation() {
+        this.mouse_location := 0
+        this.mouse_location |= WinActive(Game.WIN_NAME) ? Game.LCT_ACTIVE : 0
+
+        CoordMode, Mouse, Screen
+        MouseGetPos, mx, my
+        CoordMode, Mouse, Window
+        isInWindown := mx > this.win_x && mx < this.win_x + this.win_w && my > this.win_y && my < this.win_y + this.win_h
+        this.mouse_location |= isInWindown ? Game.LCT_IN_GAME : 0
 
         win := Game.WIN_NAME
         x := this.left_button.x
         y := this.left_button.y
         PixelGetColor, color, %x%, %y%, RGB
-        if ((color = Game.NAVI_BUTTON_HOVER_COLOR) || (color = Game.NAVI_BUTTON_ENABLE_COLOR) || (color = Game.NAVI_BUTTON_DISABLE_COLOR)) {
-            location |= Game.LOCATION_IN_CSD_TAB
-        }
+        isInCRDTab := color = Game.NAVI_BUTTON_HOVER_COLOR || color = Game.NAVI_BUTTON_ENABLE_COLOR || color = Game.NAVI_BUTTON_DISABLE_COLOR
+        this.mouse_location |= isInCRDTab ? Game.LCT_IN_CSD_TAB : 0
+    }
 
-        return location
+    MouseLocationIs(location) {
+        return this.mouse_location & location
     }
 
     IsAbilityReady(index) {

@@ -2,8 +2,7 @@
 #Include, Game.ahk
 
 LevelUp(game) {
-    location := game.GetMouseLocation()
-    if (location == Game.LOCATION_NOT_ACTIVE || location & Game.LOCATION_IN_CSD_TAB) {
+    if (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
         win := game.WIN_NAME
         p := game.lvlup_button.toPosition()
         ControlClick, %p%, %win%
@@ -11,8 +10,7 @@ LevelUp(game) {
 }
 
 Upgrade(game) {
-    location := game.GetMouseLocation()
-    if (location == Game.LOCATION_NOT_ACTIVE || location & Game.LOCATION_IN_CSD_TAB) {
+    if (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
         win := game.WIN_NAME
         p := game.UPGRADE_BUTTON.toPosition()
         ControlClick, %p%, %win%
@@ -20,12 +18,14 @@ Upgrade(game) {
 }
 
 LoadFormation(game, key) {
-    win := game.WIN_NAME
-    ControlSend, , %key%, %win%
+    if (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
+        win := game.WIN_NAME
+        ControlSend, , %key%, %win%
+    }
 }
 
 StormRider(game) {
-    If (game.IsAbilityReady(7)) {
+    If (game.IsAbilityReady(7) && (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB))) {
         win := game.WIN_NAME
         a2 := game.GetAbility(2).toPosition()
         a7 := game.GetAbility(7).toPosition()
@@ -35,30 +35,33 @@ StormRider(game) {
 }
 
 Collect() {
-    MouseMove, 0, 50, 0, R
-    MouseMove, 0, -100, 0, R
-    MouseMove, 0, 50, 0, R
+    If (game.MouseLocationIs(Game.LCT_IN_GAME) && (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB))) {
+        MouseMove, 0, 50, 0, R
+        MouseMove, 0, -100, 0, R
+        MouseMove, 0, 50, 0, R
+    }
 }
 
 AutoClick(game) {
     win := game.WIN_NAME
-    location := game.GetMouseLocation()
-    if (location & Game.LOCATION_IN_CSD_TAB && state.followmouse) {
+    if (state.followmouse && game.MouseLocationIs(Game.LCT_IN_GAME) && game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
         MouseGetPos, mx, my
         ControlClick, x%mx% y%my%, %win%
-    } else {
+    } else if (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
         p := game.CLICK_LOCATION.toPosition()
         ControlClick, %p%, %win%
     }
 }
 
 Forward(game) {
-    win := game.WIN_NAME
-    ControlSend, , {Right}, %win%
+    if (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
+        win := game.WIN_NAME
+        ControlSend, , {Right}, %win%
+    }
 }
 
 FocusLevel(game, index) {
-    If (game.GetMouseLocation() && index >= 1 && index <= 6) {
+    If (index >= 1 && index <= 6 && (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB))) {
         win := game.WIN_NAME
         p := game.GetCrusaderPosition(index).toPosition()
         ControlSend, , {Ctrl Down}, %win%
@@ -71,6 +74,8 @@ game := new Game()
 
 i := 0
 Loop {
+    game.UpdateMouseLocation()
+
     If (state.fastforward) {
         Forward(game)
     }
@@ -102,7 +107,7 @@ Loop {
     } Else {
         i += 1
     }
-    Sleep, 100
+    Sleep, 50
 }
 
 F5:: state.autoplay := !state.autoplay
@@ -127,4 +132,4 @@ F11:: Upgrade(game)
 
 !Right:: state.fastforward := !state.fastforward
 
-MButton:: state.followmouse := !state.followmouse
+~MButton:: state.followmouse := !state.followmouse
