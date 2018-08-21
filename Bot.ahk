@@ -115,8 +115,6 @@ Loop {
 ~F7:: state.autoclick := !state.autoclick
 ~F8:: state.autocollect := !state.autocollect
 ~F9:: state.show()
-~F10:: LevelUp(game)
-~F11:: Upgrade(game)
 
 ~!0:: state.focusOn := 0 state.reformation := 0
 ~!1:: state.focusOn := 1
