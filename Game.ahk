@@ -93,7 +93,10 @@ class Game {
     }
 
     IsAbilityReady(index) {
-        if (WinActive(Game.WIN_NAME) && index >= 1 && index <= 8) {
+        if (!WinActive(Game.WIN_NAME)) {
+            return 1
+        }
+        if (index >= 1 && index <= 8) {
             win := Game.WIN_NAME
             ability := Game.GetAbility(index)
             x := ability.x

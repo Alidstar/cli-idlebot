@@ -25,7 +25,7 @@ LoadFormation(game, key) {
 }
 
 StormRider(game) {
-    If (game.IsAbilityReady(7) && (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB))) {
+    If (game.IsAbilityReady(7)) {
         win := game.WIN_NAME
         a2 := game.GetAbility(2).toPosition()
         a7 := game.GetAbility(7).toPosition()
@@ -110,26 +110,26 @@ Loop {
     Sleep, 50
 }
 
-F5:: state.autoplay := !state.autoplay
-F6:: state.autoupgrade := !state.autoupgrade
-F7:: state.autoclick := !state.autoclick
-F8:: state.autocollect := !state.autocollect
-F9:: state.show()
-F10:: LevelUp(game)
-F11:: Upgrade(game)
+~F5:: state.autoplay := !state.autoplay
+~F6:: state.autoupgrade := !state.autoupgrade
+~F7:: state.autoclick := !state.autoclick
+~F8:: state.autocollect := !state.autocollect
+~F9:: state.show()
+~F10:: LevelUp(game)
+~F11:: Upgrade(game)
 
-!0:: state.focusOn := 0 state.reformation := 0
-!1:: state.focusOn := 1
-!2:: state.focusOn := 2
-!3:: state.focusOn := 3
-!4:: state.focusOn := 4
-!5:: state.focusOn := 5
-!6:: state.focusOn := 6
+~!0:: state.focusOn := 0 state.reformation := 0
+~!1:: state.focusOn := 1
+~!2:: state.focusOn := 2
+~!3:: state.focusOn := 3
+~!4:: state.focusOn := 4
+~!5:: state.focusOn := 5
+~!6:: state.focusOn := 6
 
-!7:: state.reformation := "q"
-!8:: state.reformation := "w"
-!9:: state.reformation := "e"
+~!7:: state.reformation := "q"
+~!8:: state.reformation := "w"
+~!9:: state.reformation := "e"
 
-!Right:: state.fastforward := !state.fastforward
+~!Right:: state.fastforward := !state.fastforward
 
 ~MButton:: state.followmouse := !state.followmouse
