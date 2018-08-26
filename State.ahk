@@ -5,6 +5,7 @@ class State {
     autocollect := False
     fastforward := False
     followmouse := False
+    stormrider := False
 
     reformation := 0
     focusOn := 0
@@ -26,6 +27,7 @@ class State {
         str .= "`n" . this.__show_state_bool("auto collect", this.autocollect)
         str .= "`n" . this.__show_state_bool("fast forward", this.fastforward)
         str .= "`n" . this.__show_state_bool("follow mouse", this.followmouse)
+        str .= "`n" . this.__show_state_bool("storm rider", this.stormrider)
         str .= "`n" . this.__show_state_value("focus crusader", this.focusOn ? this.focusOn : "None")
         str .= "`n" . this.__show_state_value("reformation", this.reformation ? this.reformation : "None")
         MsgBox, , State, %str%

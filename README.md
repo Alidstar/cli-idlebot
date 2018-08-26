@@ -8,8 +8,7 @@ F6         toggle auto upgrade
 F7         toggle auto click
 F8         toggle auto collect
 F9         show status
-F10        manually crusaders level up
-F11        manually crusaders upgrade
+F10        toggle auto cast Storm rider
 
 Alt+Right  fast forward (repeatly press right arrow)
 MButton    activate mouse following click (when auto click is on)

@@ -84,10 +84,14 @@ Loop {
             LoadFormation(game, state.reformation)
         }
         If (Mod(i, 250) = 0) {
-            StormRider(game)
             FocusLevel(game, state.focusOn)
             LevelUp(game)
             Forward(game)
+        }
+    }
+    If (state.stormrider) {
+        If (Mod(i, 300) = 0) {
+            StormRider(game)
         }
     }
     If (state.autoupgrade) {
@@ -115,6 +119,7 @@ Loop {
 ~F7:: state.autoclick := !state.autoclick
 ~F8:: state.autocollect := !state.autocollect
 ~F9:: state.show()
+~F10:: state.stormrider := !state.stormrider
 
 ~!0:: state.focusOn := 0 state.reformation := 0
 ~!1:: state.focusOn := 1
