@@ -71,6 +71,7 @@ FocusLevel(game, index) {
 }
 
 game := new Game()
+state := new State()
 
 i := 0
 Loop {
