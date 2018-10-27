@@ -1,11 +1,11 @@
 class State {
-    autoplay := False
+    autoplay := True
     autoupgrade := False
     autoclick := False
     autocollect := False
     fastforward := False
     followmouse := False
-    stormrider := False
+    stormrider := True
 
     reformation := 0
     focusOn := 0
