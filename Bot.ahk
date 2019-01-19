@@ -54,10 +54,8 @@ AutoClick(game) {
 }
 
 Forward(game) {
-    if (!game.MouseLocationIs(Game.LCT_ACTIVE) || game.MouseLocationIs(Game.LCT_IN_CSD_TAB)) {
-        win := game.WIN_NAME
-        ControlSend, , {Right}, %win%
-    }
+    win := game.WIN_NAME
+    ControlSend, , {Right}, %win%
 }
 
 FocusLevel(game, index) {
@@ -78,7 +76,9 @@ Loop {
     game.UpdateMouseLocation()
 
     If (state.fastforward) {
-        Forward(game)
+        if (Mod(i, 5) = 0) {
+            Forward(game)
+        }
     }
     If (state.autoplay) {
         If (Mod(i, 100) = 0) {
@@ -87,7 +87,6 @@ Loop {
         If (Mod(i, 250) = 0) {
             FocusLevel(game, state.focusOn)
             LevelUp(game)
-            Forward(game)
         }
     }
     If (state.stormrider) {
